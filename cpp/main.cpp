@@ -3,7 +3,7 @@
 #include <type_traits>
 #include "read_data/csv_data_reader.h"
 
-template <typename... Types>
+template<typename... Types>
 class TupleReader
 {
 public:
@@ -21,27 +21,31 @@ public:
 	}
 
 private:
-	template <std::size_t... Is>
-	void readHelper(std::istringstream& iss, std::tuple<Types...>& tuple, std::index_sequence<Is...>) {
+	template<std::size_t... Is>
+	void readHelper(std::istringstream &iss, std::tuple<Types...> &tuple, std::index_sequence<Is...>)
+	{
 		(..., readOne(iss, std::get<Is>(tuple)));
 	}
-	template <typename T>
-	void readOne(std::istringstream& iss, T& value) {
+	template<typename T>
+	void readOne(std::istringstream &iss, T &value)
+	{
 		iss >> value;
 		iss.ignore(1, ',');
 	}
-	std::tuple<Types...>& tuple_;
+	std::tuple<Types...> &tuple_;
 };
 
 
 #include <iostream>
 #include <string>
 
-int main() {
+int main()
+{
 	std::string path{"/media/linux_data/projects/cpp/hypothesis_testing/data/FuelsCosts.csv"};
-	auto d = CSVDataReader<int, double, std::string>(path);
+	auto d = CSVDataReader<int, int>(path);
 	d.read();
 	auto data = d.get_data();
+	auto headers = d.get_header();
 
 	std::tuple<int, double, std::string> myTuple;
 	TupleReader<int, double, std::string> reader(myTuple);
