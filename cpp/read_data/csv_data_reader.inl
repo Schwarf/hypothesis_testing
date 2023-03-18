@@ -25,15 +25,26 @@ void CSVDataReader<DataRows...>::read()
 			std::getline(file, line);
 			read_header(std::move(line));
 		}
-
 		while(std::getline(file, line))
 		{
-
+			read_data_row<sizeof...(DataRows)>(std::move(line));
 		}
 
 		return;
 	}
 }
+
+
+template<typename... DataRows>
+void CSVDataReader<DataRows...>::read_header(const std::string && line)
+{
+	std::istringstream header(line);
+	std::string column_name;
+	while (std::getline(header, column_name, ',')) {
+		column_names_.push_back(column_name);
+	}
+}
+
 
 template<typename... DataRows>
 std::vector<std::string> CSVDataReader<DataRows...>::get_header() const

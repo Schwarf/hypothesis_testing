@@ -22,35 +22,32 @@ public:
 
 private:
 	void read_header(const std::string && line);
-	void read_data_row(const std::string && line);
+
+	template<size_t... size>
+	void read_data_row(const std::string && line){
+		std::istringstream data_row(line);
+		std::tuple<DataRows...> data;
+		read_helper(data_row, data, std::make_index_sequence<sizeof...(DataRows)>());
+		data_.push_back(data);
+	}
+	template<size_t... size>
+	void read_helper(std::istringstream& iss, std::tuple<DataRows...> & data,  std::index_sequence<size...>)
+	{
+		(..., read_one_element(iss, std::get<size>(data)));
+	}
+	template <typename T>
+	void read_one_element(std::istringstream& iss, T & data_element)
+	{
+		iss >> data_element;
+		iss.ignore(1, ',');
+	}
+
 	std::vector<std::string> column_names_;
 	std::vector<std::tuple<DataRows...>> data_;
 	std::filesystem::path path_;
 	bool has_header_;
 };
 
-template<typename... DataRows>
-void CSVDataReader<DataRows...>::read_header(const std::string && line)
-{
-	std::istringstream header(line);
-	std::string column_name;
-	while (getline(header, column_name, ',')) {
-		column_names_.push_back(column_name);
-	}
-
-}
-
-
-template<typename... DataRows>
-void CSVDataReader<DataRows...>::read_data_row(const std::string && line)
-{
-	std::istringstream header(line);
-	std::string column_name;
-	while (getline(header, column_name, ',')) {
-		column_names_.push_back(column_name);
-	}
-
-}
 
 #include "csv_data_reader.inl"
 
