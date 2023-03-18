@@ -18,13 +18,19 @@ template<typename... DataRows>
 void CSVDataReader<DataRows...>::read()
 {
 	std::ifstream file(path_);
-
+	std::string line;
 	if(file.is_open())
 	{
-		if(has_header_)
-		{
-			return;
+		if(has_header_) {
+			std::getline(file, line);
+			read_header(std::move(line));
 		}
+
+		while(std::getline(file, line))
+		{
+
+		}
+
 		return;
 	}
 }

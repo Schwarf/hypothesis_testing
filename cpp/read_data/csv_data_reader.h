@@ -21,11 +21,36 @@ public:
 	std::vector<std::string> get_header() const;
 
 private:
+	void read_header(const std::string && line);
+	void read_data_row(const std::string && line);
 	std::vector<std::string> column_names_;
 	std::vector<std::tuple<DataRows...>> data_;
 	std::filesystem::path path_;
 	bool has_header_;
 };
+
+template<typename... DataRows>
+void CSVDataReader<DataRows...>::read_header(const std::string && line)
+{
+	std::istringstream header(line);
+	std::string column_name;
+	while (getline(header, column_name, ',')) {
+		column_names_.push_back(column_name);
+	}
+
+}
+
+
+template<typename... DataRows>
+void CSVDataReader<DataRows...>::read_data_row(const std::string && line)
+{
+	std::istringstream header(line);
+	std::string column_name;
+	while (getline(header, column_name, ',')) {
+		column_names_.push_back(column_name);
+	}
+
+}
 
 #include "csv_data_reader.inl"
 
