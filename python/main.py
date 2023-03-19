@@ -1,16 +1,12 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import descriptive_statistics
+import fuel_costs.descriptive_statistics
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    data =descriptive_statistics.read_data()
+    print(descriptive_statistics.compute_mean_and_std(data, axis=0, result_index=1))
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
