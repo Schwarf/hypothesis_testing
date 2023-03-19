@@ -1,6 +1,7 @@
 # Prerequisites
 cmake-build-debug/
 env_hypothesis_testing/
+__pycache__/
 .idea/
 *.d
 
